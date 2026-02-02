@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>Love Smsmty♥</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #2b0033, #0d0014);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      direction: rtl;
+    }
+
+    #scene {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* زر القلب */
+    #heartBtn {
+      
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  font-size: 250px;        /* حجم القلب */
+  cursor: pointer;
+  user-select: none;
+
+  color: #ff5fa2;         /* بينك */
+  text-shadow:
+    0 0 20px rgba(255, 95, 162, 0.8),
+    0 0 40px rgba(255, 95, 162, 0.6);
+
+  transition: transform 0.2s ease;
+}
+
+/* حركة عند الضغط */
+#heartBtn.clicked {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+    
+
+    #heartBtn.clicked {
+      transform: translateX(-50%) scale(1.2);
+    }
+
+    /* الجمل */
+    .phrase {
+      position: absolute;
+      color: #fff;
+      font-size: 18px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      animation: shoot var(--duration) ease-out forwards;
+      transform: rotate(var(--rotation));
+    }
+
+    @keyframes shoot {
+      0% {
+        transform: translate(0, 0) rotate(var(--rotation));
+        opacity: 1;
+      }
+      30% {
+        transform: translate(var(--shoot-x), var(--shoot-y))
+          rotate(var(--rotation));
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--final-x), var(--final-y))
+          rotate(var(--final-rotation));
+        opacity: 0;
+      }
+    }
+
+    /* الجزيئات */
+    .particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: pink;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: burst 0.8s ease-out forwards;
+    }
+
+    @keyframes burst {
+      to {
+        transform: translate(var(--particle-x), var(--particle-y));
+        opacity: 0;
+      }
+    }
+
+    /* مشغل الموسيقى */
+    #musicPlayer {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 15px;
+      border-radius: 20px;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    #musicPlayer.active {
+      opacity: 1;
+    }
+
+    #playPauseBtn {
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    #progressBar {
+      width: 120px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    #progressFill {
+      width: 0%;
+      height: 100%;
+      background: pink;
+    }
+
+    #time {
+      font-size: 12px;
+    }
+    :root {
+  --bg: #0a0a0f;
+  --fg: #ffffff;
+  --pink: #ffd6e7;
+  --heart: #ff2b4f;
+  --shadow: rgba(255, 43, 79, 0.6);
+  --textGlow: 0 0 .6rem rgba(255, 214, 231, .9);
+  --maxWidth: 1200px;
+  --messageBoxBg: rgba(139, 69, 119, 0.6);
+}
+
+body {
+  margin: 0;
+  font-family: "Sour Gummy", system-ui, sans-serif;
+  color: var(--fg);
+  background: linear-gradient(to bottom, #000000, #2a3a6b);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* العنصر الأساسي */
+.scene {
+  position: relative;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* خلفية النجوم */
+.scene[data-bg="stars"] {
+  background: linear-gradient(to bottom, #000000, #2a3a6b);
+}
+
+.scene[data-bg="stars"]::before,
+.scene[data-bg="stars"]::after {
+  content: "";
+  position: absolute;
+  inset: -50% -50%;
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* نجوم طبقة 1 */
+.scene[data-bg="stars"]::before {
+  background-image:
+    radial-gradient(3px 3px at 15px 25px, #fff 50%, transparent 51%),
+    radial-gradient(2px 2px at 45px 75px, #fff 50%, transparent 51%),
+    radial-gradient(4px 4px at 85px 45px, #fff 50%, transparent 51%);
+  background-size: 500px 400px;
+  animation: twinkleA 4s ease-in-out infinite;
+}
+
+/* نجوم طبقة 2 */
+.scene[data-bg="stars"]::after {
+  background-image:
+    radial-gradient(2px 2px at 30px 40px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 70px 90px, #fff 50%, transparent 51%),
+    radial-gradient(3px 3px at 110px 20px, #fff 50%, transparent 51%);
+  background-size: 500px 350px;
+  animation: twinkleB 6s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+/* حركة اللمعان */
+@keyframes twinkleA {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes twinkleB {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="scene"class="scene" data-bg="stars"></div>
+    <div id="musicPlayer">
+      <div id="playPauseBtn">
+        <span id="playIcon">▶</span>
+        <span id="pauseIcon" style="display:none;">⏸</span>
+      </div>
+
+      <div id="progressBar">
+        <div id="progressFill"></div>
+      </div>
+
+      <div id="time">
+        <span id="currentTime">0:00</span> /
+        <span id="totalTime">0:00</span>
+      </div>
+    </div>
+
+    <div id="heartBtn">♥</div>
+
+    <!-- غيري رابط الأغنية لو حابة -->
+    <audio id="audioPlayer" src="2_5190453520356120429.ogg"></audio>
+    <audio id="audioPlayer" src="2_5190453520356120429.mp3"></audio>
+
+    
+  </div>
+
+  <script>
+    const PHRASES = [
+      "أنتِ أجمل مغامرة في حياتي ✨ 💖",
+      "معك كل شيء يصبح سحرًا 🌙 💖",
+      "ملاذي المفضل هو أنتِ 🏡 💖",
+      "ابتسامتك تنوّر حياتي 🌟 💖",
+      "أنتِ أغنيتي التي لا تنتهي 🎶 💖",
+      "قدري هو أنتِ 💫 💖",
+      "حبّنا سيبقى للأبد 🔥 💖",
+      "بجوارك أنا سعيد 💖",
+      "أحبك أكثر كل يوم 💖",
+      "حبك هو مصدر إلهامي 🎨 💖",
+      "أنتِ وطني ومغامرتي 🗺️ 💖",
+      "معك يتوقف الزمن ⏰ 💖",
+      "بحبك سمسمتي💖✨",
+      "قلبي بينبض باسمك إنتِ وبس 💓",
+      "سمسمتي لو رجع بيا الزمن أختارك تاني 💖",
+      "معاك الوقت بيجري وأنا مش عايز أوقفه ⏳💖",
+      "قلبي ارتاح لما اختارك إنت ❤️",
+      "تملي معاك قلبي وروحي وعمري كله 💖"
+      
+    ];
+
+    const scene = document.getElementById("scene");
+    const heartBtn = document.getElementById("heartBtn");
+    const musicPlayer = document.getElementById("musicPlayer");
+    const audioPlayer = document.getElementById("audioPlayer");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const progressBar = document.getElementById("progressBar");
+    const progressFill = document.getElementById("progressFill");
+    const currentTimeEl = document.getElementById("currentTime");
+    const totalTimeEl = document.getElementById("totalTime");
+    const playIcon = document.getElementById("playIcon");
+    const pauseIcon = document.getElementById("pauseIcon");
+
+    let isProcessing = false;
+    let firstClick = true;
+    let isPlaying = false;
+
+    heartBtn.addEventListener("click", triggerRelease);
+    playPauseBtn.addEventListener("click", togglePlayPause);
+    progressBar.addEventListener("click", seekAudio);
+    audioPlayer.addEventListener("timeupdate", updateProgress);
+    audioPlayer.addEventListener("loadedmetadata", updateProgress);
+
+    function triggerRelease(e) {
+      if (isProcessing) return;
+      isProcessing = true;
+
+      if (firstClick) {
+        activateMusic();
+        firstClick = false;
+      }
+
+      releasePhrase();
+      setTimeout(() => (isProcessing = false), 300);
+    }
+
+    function activateMusic() {
+      musicPlayer.classList.add("active");
+      audioPlayer.play().then(() => {
+        isPlaying = true;
+        showPauseIcon();
+      });
+    }
+
+    function togglePlayPause() {
+      if (isPlaying) {
+        audioPlayer.pause();
+        showPlayIcon();
+        isPlaying = false;
+      } else {
+        audioPlayer.play();
+        showPauseIcon();
+        isPlaying = true;
+      }
+    }
+
+    function showPlayIcon() {
+      playIcon.style.display = "inline";
+      pauseIcon.style.display = "none";
+    }
+
+    function showPauseIcon() {
+      playIcon.style.display = "none";
+      pauseIcon.style.display = "inline";
+    }
+
+    function updateProgress() {
+      if (!audioPlayer.duration) return;
+      const progress =
+        (audioPlayer.currentTime / audioPlayer.duration) * 100;
+      progressFill.style.width = progress + "%";
+      currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+      totalTimeEl.textContent = formatTime(audioPlayer.duration);
+    }
+
+    function seekAudio(e) {
+      const rect = progressBar.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      audioPlayer.currentTime =
+        (x / rect.width) * audioPlayer.duration;
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return m + ":" + (s < 10 ? "0" : "") + s;
+    }
+
+    function releasePhrase() {
+      heartBtn.classList.add("clicked");
+      setTimeout(() => heartBtn.classList.remove("clicked"), 700);
+      createParticlesBurst();
+      createPhrase();
+    }
+
+    function createPhrase() {
+      const text = PHRASES[Math.floor(Math.random() * PHRASES.length)];
+      const el = document.createElement("div");
+      el.className = "phrase";
+      el.textContent = text;
+
+      const heartRect = heartBtn.getBoundingClientRect();
+      const sceneRect = scene.getBoundingClientRect();
+
+      const startX =
+        heartRect.left + heartRect.width / 2 - sceneRect.left;
+      const startY =
+        heartRect.top + heartRect.height / 2 - sceneRect.top;
+
+      el.style.left = startX + "px";
+      el.style.top = startY + "px";
+
+      const angle = Math.random() * 120 - 150;
+      const force = rand(150, 230);
+
+      const shootX = Math.cos((angle * Math.PI) / 180) * force;
+      const shootY = Math.sin((angle * Math.PI) / 180) * force;
+
+      const finalX = shootX + rand(-120, 120);
+      const finalY = shootY + rand(250, 450);
+
+      el.style.setProperty("--shoot-x", shootX + "px");
+      el.style.setProperty("--shoot-y", shootY + "px");
+      el.style.setProperty("--final-x", finalX + "px");
+      el.style.setProperty("--final-y", finalY + "px");
+      el.style.setProperty("--rotation", rand(-20, 20) + "deg");
+      el.style.setProperty(
+        "--final-rotation",
+        rand(-60, 60) + "deg"
+      );
+      el.style.setProperty("--duration", rand(4.5, 6.5) + "s");
+
+      scene.appendChild(el);
+      el.addEventListener("animationend", () => el.remove());
+    }
+
+    function createParticlesBurst() {
+      const heartRect = heartBtn.getBoundingClientRect();
+      const sceneRect = scene.getBoundingClientRect();
+
+      const x =
+        heartRect.left + heartRect.width / 2 - sceneRect.left;
+      const y =
+        heartRect.top + heartRect.height / 2 - sceneRect.top;
+
+      const count = rand(10, 15);
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.style.left = x + "px";
+        p.style.top = y + "px";
+
+        const angle = Math.random() * 360;
+        const dist = rand(50, 90);
+        p.style.setProperty(
+          "--particle-x",
+          Math.cos((angle * Math.PI) / 180) * dist + "px"
+        );
+        p.style.setProperty(
+          "--particle-y",
+          Math.sin((angle * Math.PI) / 180) * dist + "px"
+        );
+
+        scene.appendChild(p);
+        p.addEventListener("animationend", () => p.remove());
+      }
+    }
+
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+  </script>
+</body>
+</html>
